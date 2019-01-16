@@ -13,7 +13,7 @@ def register_blueprints(app):
 
 
 def create_app(test_config=None):
-    app = Flask(__name__)
+    app = helpers.ApiFlask(__name__)
 
     if test_config is None:
         app.config.from_object(Config)

@@ -1,4 +1,26 @@
-from flask import json, Response
+from functools import update_wrapper
+from flask import Flask, json, Response
+
+
+class ApiFlask(Flask):
+    def make_response(self, rv):
+        if isinstance(rv, ApiResult):
+            return rv.to_response()
+        return Flask.make_response(self, rv)
+
+
+class ApiResult:
+    def __init__(self, value, status=200):
+        self.value = value
+        self.status = status
+
+    def to_response(self):
+        return Response(
+            json.dumps(self.value),
+            status=self.status,
+            mimetype='application/json',
+            headers={'Access-Control-Allow-Origin': '*'}
+        )
 
 
 class ApiException(Exception):
@@ -7,9 +29,10 @@ class ApiException(Exception):
         self.status = status
 
     def to_result(self):
-        return Response(json.dumps({'message': self.message}),
-                        status=self.status,
-                        mimetype='application/json')
+        return ApiResult(
+            {'message': self.message},
+            status=self.status
+        )
 
 
 def validate_body(request_json):
@@ -22,3 +45,10 @@ def register_api(bp, view, endpoint, url, pk='id', pk_type='int'):
     bp.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=['GET', ])
     bp.add_url_rule(url, view_func=view_func, methods=['POST', ])
     bp.add_url_rule(f'{url}<{pk_type}:{pk}>', view_func=view_func, methods=['GET', 'PUT', 'DELETE'])
+
+
+def api_result(f):
+    def new_func(*args, **kwargs):
+        rv = f(*args, **kwargs)
+        return ApiResult(rv)
+    return update_wrapper(new_func, f)
