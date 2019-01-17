@@ -1,5 +1,5 @@
 from flask.views import MethodView
-from flask import request
+from flask import request, jsonify, make_response
 
 from flower_bed_designer.helpers import validate_body, ApiResult
 from flower_bed_designer.blueprints.plant import data_logic
@@ -12,7 +12,7 @@ class PlantAPI(MethodView):
         if plant_id:
             return ApiResult(data_logic.get_plant(plants_data, plant_id))
         else:
-            return ApiResult(data_logic.get_plants(plants_data))
+            return jsonify(data_logic.get_plants(plants_data))
 
     def post(self):
         validate_body(request.json)
@@ -26,3 +26,10 @@ class PlantAPI(MethodView):
 
     def delete(self, plant_id):
         return ApiResult(data_logic.delete_plant(plants_data, plant_id), 204)
+
+    def options(self):
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add('Access-Control-Allow-Headers', "*")
+        response.headers.add('Access-Control-Allow-Methods', "*")
+        return response
