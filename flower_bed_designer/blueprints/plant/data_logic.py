@@ -1,3 +1,4 @@
+from cerberus import Validator
 from voluptuous import MultipleInvalid
 
 from flower_bed_designer.blueprints.plant import schemas
@@ -18,8 +19,10 @@ def get_plant(plants_data, plant_id):
 
 
 def create_plant(plants_data, request_json):
-    try:
-        schemas.plant_schema(request_json)
+    v = Validator(schemas.c_schema)
+    is_valid = v.validate(request_json)
+
+    if is_valid:
 
         new_plant = {
             'plant_id': 4,
@@ -33,9 +36,9 @@ def create_plant(plants_data, request_json):
         plants_data.append(new_plant)
 
         return new_plant
-
-    except MultipleInvalid as e:
-        raise ApiException(str(e), 400)
+    else:
+        error_msg = str(v.errors)
+        raise ApiException(error_msg, 400)
 
 
 def update_plant(plants_data, plant_id, request_json):

@@ -13,16 +13,12 @@ def test_create_plant(test_plants_data, test_cu_plant_data):
     assert plant == test_cu_plant_data
 
 
-required_msg = 'required key not provided'
-
-
 def test_create_plant_missing_common_name(test_plants_data, test_cu_plant_data):
     del test_cu_plant_data['common_name']
 
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert required_msg in excinfo.value.message
     assert 'common_name' in excinfo.value.message
     assert excinfo.value.status == 400
 
@@ -33,7 +29,6 @@ def test_create_plant_missing_genus(test_plants_data, test_cu_plant_data):
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert required_msg in excinfo.value.message
     assert 'genus' in excinfo.value.message
     assert excinfo.value.status == 400
 
@@ -44,7 +39,6 @@ def test_create_plant_missing_species(test_plants_data, test_cu_plant_data):
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert required_msg in excinfo.value.message
     assert 'species' in excinfo.value.message
     assert excinfo.value.status == 400
 
@@ -55,13 +49,23 @@ def test_create_plant_missing_family(test_plants_data, test_cu_plant_data):
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert required_msg in excinfo.value.message
     assert 'family' in excinfo.value.message
     assert excinfo.value.status == 400
 
 
+def test_create_plant_missing_multiple(test_plants_data, test_cu_plant_data):
+    del test_cu_plant_data['family']
+    del test_cu_plant_data['genus']
+
+    with pytest.raises(ApiException) as excinfo:
+        create_plant(test_plants_data, test_cu_plant_data)
+
+    assert 'family' in excinfo.value.message
+    assert 'genus' in excinfo.value.message
+    assert excinfo.value.status == 400
+
+
 invalid_str_values = [1, True, 1.1, None, {}]
-invalid_str_msg = 'expected str for dictionary value'
 
 
 @pytest.mark.parametrize('test_value', invalid_str_values)
@@ -71,7 +75,6 @@ def test_create_plant_invalid_common_name(test_plants_data, test_cu_plant_data, 
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert invalid_str_msg in excinfo.value.message
     assert 'common_name' in excinfo.value.message
     assert excinfo.value.status == 400
 
@@ -83,7 +86,6 @@ def test_create_plant_invalid_genus(test_plants_data, test_cu_plant_data, test_v
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert invalid_str_msg in excinfo.value.message
     assert 'genus' in excinfo.value.message
     assert excinfo.value.status == 400
 
@@ -95,7 +97,6 @@ def test_create_plant_invalid_species(test_plants_data, test_cu_plant_data, test
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert invalid_str_msg in excinfo.value.message
     assert 'species' in excinfo.value.message
     assert excinfo.value.status == 400
 
@@ -107,13 +108,11 @@ def test_create_plant_invalid_family(test_plants_data, test_cu_plant_data, test_
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert invalid_str_msg in excinfo.value.message
     assert 'family' in excinfo.value.message
     assert excinfo.value.status == 400
 
 
 invalid_bool_values = [1, 'blah', 1.1, None, {}]
-invalid_bool_msg = 'expected bool for dictionary value'
 
 
 @pytest.mark.parametrize('test_value', invalid_bool_values)
@@ -123,7 +122,6 @@ def test_create_plant_invalid_rhizomatous(test_plants_data, test_cu_plant_data, 
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert invalid_bool_msg in excinfo.value.message
     assert 'rhizomatous' in excinfo.value.message
     assert excinfo.value.status == 400
 
@@ -135,6 +133,5 @@ def test_create_plant_invalid_garden_friendly(test_plants_data, test_cu_plant_da
     with pytest.raises(ApiException) as excinfo:
         create_plant(test_plants_data, test_cu_plant_data)
 
-    assert invalid_bool_msg in excinfo.value.message
     assert 'garden_friendly' in excinfo.value.message
     assert excinfo.value.status == 400
