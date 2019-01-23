@@ -27,3 +27,29 @@ plants_data = [
         'garden_friendly': True
     }
 ]
+
+bed_data = [
+    {
+        'bed_id': 1,
+        'area': 123.4,
+        'plants': [1, 2, 3]
+    }
+]
+
+user_data = [
+    {
+        'user_id': 1,
+        'username': 'capabilityBrown1716',
+        'beds': []
+    },
+    {
+        'user_id': 2,
+        'username': 'f_l_olmsted_1822',
+        'beds': []
+    },
+    {
+        'user_id': 3,
+        'username': 'tommyDC_1902',
+        'beds': []
+    }
+]
