@@ -1,7 +1,7 @@
 import pytest
 
-from flower_bed_designer.helpers import ApiException
 from flower_bed_designer.blueprints.plant.data_logic import update_plant
+from flower_bed_designer.helpers import ApiException
 
 
 def test_update_plant(test_plants_data, test_cu_plant_data):

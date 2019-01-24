@@ -1,8 +1,8 @@
-from flask.views import MethodView
 from flask import request, jsonify, make_response
+from flask.views import MethodView
 
-from flower_bed_designer.helpers import validate_body, ApiResult
 from flower_bed_designer.blueprints.plant import data_logic
+from flower_bed_designer.helpers import validate_body, ApiResult
 from flower_bed_designer.persistence import plants_data
 
 

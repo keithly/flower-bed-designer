@@ -1,7 +1,7 @@
 import pytest
 
-from flower_bed_designer.helpers import ApiException
 from flower_bed_designer.blueprints.plant.data_logic import delete_plant
+from flower_bed_designer.helpers import ApiException
 
 
 def test_delete_plant(test_plants_data):
