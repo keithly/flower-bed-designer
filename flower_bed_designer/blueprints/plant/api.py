@@ -12,7 +12,7 @@ class PlantAPI(MethodView):
         if plant_id:
             return ApiResult(data_logic.get_plant(plants_data, plant_id))
         else:
-            return jsonify(data_logic.get_plants(plants_data))
+            return ApiResult(data_logic.get_plants(plants_data))
 
     def post(self):
         validate_body(request.json)
