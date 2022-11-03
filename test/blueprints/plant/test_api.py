@@ -74,14 +74,3 @@ def test_delete(m_data_logic, client):
 
     assert response.status_code == 204
     assert response.data == b''
-
-
-def test_options(client):
-    response = client.options('/plant/')
-
-    assert response.status_code == 200
-
-    print(response.headers)
-    assert 'Access-Control-Allow-Origin' in response.headers
-    assert 'Access-Control-Allow-Headers' in response.headers
-    assert 'Access-Control-Allow-Methods' in response.headers
