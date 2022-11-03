@@ -55,18 +55,6 @@ def test_post(m_data_logic, client):
 
 
 @patch(data_logic_path)
-def test_post_wrong_content_type(m_data_logic, client):
-    fake_plant = {'key': 'value'}
-    m_data_logic.create_plant.return_value = fake_plant
-
-    response = client.post('/plant/', data=json.dumps(fake_plant))
-    body = json.loads(response.data)
-
-    assert response.status_code == 400
-    assert body == {'message': 'expected json body'}
-
-
-@patch(data_logic_path)
 def test_put(m_data_logic, client):
     fake_plant = {'key': 'value'}
     m_data_logic.update_plant.return_value = fake_plant
@@ -76,18 +64,6 @@ def test_put(m_data_logic, client):
 
     assert response.status_code == 200
     assert plant == fake_plant
-
-
-@patch(data_logic_path)
-def test_put_wrong_content_type(m_data_logic, client):
-    fake_plant = {'key': 'value'}
-    m_data_logic.update_plant.return_value = fake_plant
-
-    response = client.put('/plant/1', data=json.dumps(fake_plant))
-    body = json.loads(response.data)
-
-    assert response.status_code == 400
-    assert body == {'message': 'expected json body'}
 
 
 @patch(data_logic_path)

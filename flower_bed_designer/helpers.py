@@ -34,11 +34,6 @@ class ApiException(Exception):
         )
 
 
-def validate_body(request_json):
-    if not request_json:
-        raise ApiException('expected json body', 400)
-
-
 def register_api(bp, view, endpoint, url, pk='id', pk_type='int'):
     view_func = view.as_view(endpoint)
     bp.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=['GET', 'OPTIONS'])
